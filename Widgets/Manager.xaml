@@ -1,0 +1,195 @@
+﻿<Window x:Class="Widgets.Manager"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Widgets"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="{StaticResource PrimaryDarkBrush}"
+        BorderThickness="1"
+        BorderBrush="{StaticResource SecondaryBrush}"
+        Title="Widget Manager" Height="450" Width="800">
+
+    <Window.Resources>
+        <local:DoubleConverter x:Key="DoubleConverter" />
+        <local:ThicknessConverter x:Key="ThicknessConverter" />
+    </Window.Resources>
+
+    <Grid x:Name="Form" Margin="5">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--#region Top -->
+        <Border BorderThickness="0 0 0 1.5" BorderBrush="{StaticResource SecondaryBrush}" Grid.Row="0" Grid.ColumnSpan="4" Margin="0 0 0 5">
+            <Grid MouseDown="Window_DragMove">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Image Width="32" Height="32" Margin="10 0 0 0" HorizontalAlignment="Left" Source="/Widget.ico"/>
+                <TextBlock Text="Windows Widgets" FontSize="18" Foreground="{StaticResource SecondaryBrush}" Padding="15 10 5 5" Margin="50 0 0 0" Height="50"/>
+                <TextBlock Grid.Column="3" Text="🞪" FontSize="21" Foreground="{StaticResource SecondaryBrush}" Padding="8" MouseDown="Window_Close"/>
+                <TextBlock Grid.Column="2" Text="◻" FontSize="21" Foreground="Gray" Padding="8"/>
+                <TextBlock Grid.Column="1" Text="▁" FontSize="14" Foreground="{StaticResource SecondaryBrush}" Padding="8" MouseDown="Window_Min"/>
+            </Grid>
+        </Border>
+        <!--#endregion Top-->
+        
+        <!--#region Plugin ListBox-->
+        <DockPanel Grid.Column="0" Grid.Row="1">
+            <ListBox x:Name="WidgetListBox" ItemsSource="{Binding Widgets}" 
+                     SelectedItem="{Binding SelectedWidget, Mode=TwoWay}" 
+                     HorizontalContentAlignment="Stretch" 
+                     Background="Transparent" BorderThickness="0" 
+                     ItemContainerStyle="{StaticResource ContainerStyle}" 
+                     Padding="0 0 5 0" Margin="0 5 0 0" MaxWidth="250" DockPanel.Dock="Top">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="{StaticResource SecondaryBrush}" 
+                                       Padding="8 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="200" 
+                                       FontSize="14"
+                                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                            <Label Grid.Column="1" HorizontalAlignment="Right" Padding="5">
+                                <CheckBox Style="{StaticResource PowerButton}" IsChecked="{Binding IsActive, Mode=TwoWay}"/>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+        <!--#endregion Plugin ListBox-->
+        
+        <!--#region Content-->
+
+            <Border Grid.Row="1" Grid.Column="1" Margin="5" Padding="5" BorderThickness="0" BorderBrush="{StaticResource SecondaryDarkBrush}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="40"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Width / Height" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wWidth" Text="{Binding SelectedWidget.Width, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50"></TextBox>
+                            <TextBox x:Name="wHeight" Text="{Binding SelectedWidget.Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50" Margin="4 0 0 0"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Max W / Max H" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wMaxWidth" Text="{Binding SelectedWidget.MaxWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50"></TextBox>
+                            <TextBox x:Name="wMaxHeight" Text="{Binding SelectedWidget.MaxHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50" Margin="4 0 0 0"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Min W / Min H" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wMinWidth" Text="{Binding SelectedWidget.MinWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50"></TextBox>
+                            <TextBox x:Name="wMinHeight" Text="{Binding SelectedWidget.MinHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50" Margin="4 0 0 0"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Top / Left" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wTop" Text="{Binding SelectedWidget.Top, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50"></TextBox>
+                            <TextBox x:Name="wLeft" Text="{Binding SelectedWidget.Left, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" Style="{StaticResource TextBox}" Width="50" Margin="4 0 0 0"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Margin" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wMargin" Text="{Binding SelectedWidget.Margin, UpdateSourceTrigger=LostFocus, Mode=TwoWay, Converter={StaticResource ThicknessConverter}}" Style="{StaticResource TextBox}" Width="104"></TextBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Padding" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wPadding" Text="{Binding SelectedWidget.Padding, UpdateSourceTrigger=LostFocus, Mode=TwoWay, Converter={StaticResource ThicknessConverter}}" Style="{StaticResource TextBox}" Width="104"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Border Width" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBox x:Name="wBorder" Text="{Binding SelectedWidget.Border, UpdateSourceTrigger=LostFocus, Mode=TwoWay, Converter={StaticResource ThicknessConverter}}" Style="{StaticResource TextBox}" Width="104"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Background" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <xctk:ColorPicker x:Name="wBackgroundPicker"
+                                                ShowDropDownButton="False"
+                                                ShowStandardColors="True"
+                                                ShowAvailableColors="True"
+                                                ShowRecentColors="True"
+                                                BorderThickness="1.5"
+                                                BorderBrush="{StaticResource SecondaryDarkBrush}"
+                                                Background="{StaticResource PrimaryDarkBrush}"
+                                                Margin="0 1"
+                                                SelectedColor="{Binding SelectedWidget.Background}"
+                                                Width="110" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                            <TextBlock Text="Border Color" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <xctk:ColorPicker x:Name="wBorderPicker"
+                                                ShowDropDownButton="False"
+                                                ShowStandardColors="True"
+                                                ShowAvailableColors="True"
+                                                ShowRecentColors="True"
+                                                BorderThickness="1.5"
+                                                Margin="0 1"
+                                                BorderBrush="{StaticResource SecondaryDarkBrush}"
+                                                Background="{StaticResource PrimaryDarkBrush}"
+                                                SelectedColor="{Binding SelectedWidget.BorderColor}"
+                                                Width="110"/>
+                        </StackPanel>
+
+                        <StackPanel  Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Size To Content" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="wSizeToContent" SelectedValue="{Binding SelectedWidget.SizeToContent, Mode=TwoWay}" SelectedValuePath="Tag" Style="{StaticResource ComboBox}"  Width="110">
+                                <ComboBoxItem Content="Manuel" Tag="0"/>
+                                <ComboBoxItem Content="Width" Tag="1"/>
+                                <ComboBoxItem Content="Height" Tag="2"/>
+                                <ComboBoxItem Content="WidthAndHeight" Tag="3"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel  Margin="0 9" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Resizable" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="wResizable" IsChecked="{Binding SelectedWidget.Resizable}" Foreground="{StaticResource TextBrush}" Style="{StaticResource CheckBox}"></CheckBox>
+                        </StackPanel>
+                        <StackPanel  Margin="0 9" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Dragable" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="wDragable" IsChecked="{Binding SelectedWidget.Dragable}" Foreground="{StaticResource TextBrush}" Style="{StaticResource CheckBox}"></CheckBox>
+                        </StackPanel>
+                        <StackPanel  Margin="0 9" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Interactive" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="wInteractive" IsChecked="{Binding SelectedWidget.Interactive}" Foreground="{StaticResource TextBrush}" Style="{StaticResource CheckBox}"></CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="False" Margin="0">
+                        <CheckBox x:Name="StartupCheckBox" Click="Startup_Click" Style="{StaticResource CheckBox}" DockPanel.Dock="Left" Foreground="{StaticResource TextBrush}">Start on system startup</CheckBox>
+                        <Button x:Name="Save" Click="Save_Button_Click" Style="{StaticResource Button}" DockPanel.Dock="Right">Save</Button>
+                        <Button Click="InternalSettingsButton_Click" Style="{StaticResource ButtonRed}" DockPanel.Dock="Right" Margin="0 0 5 0">Internal Settings</Button>
+                    </DockPanel>
+                </Grid>
+            </Border>
+
+      
+        <!--#endregion Content-->
+    </Grid>
+</Window>

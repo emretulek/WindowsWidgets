@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Global renk tanımları -->
+    <Color x:Key="PrimaryColor">#014b4f</Color>
+    <Color x:Key="PrimaryDarkColor">#001928</Color>
+    <Color x:Key="SecondaryColor">#a67d03</Color>
+    <Color x:Key="SecondaryDarkColor">#795b02</Color>
+    <Color x:Key="RedColor">#643939</Color>
+    <Color x:Key="RedDarkColor">#372424</Color>
+    <Color x:Key="TextColor">#BBBBBB</Color>
+
+    <!-- Global fırça tanımları (Brush) -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/>
+    <SolidColorBrush x:Key="SecondaryDarkBrush" Color="{StaticResource SecondaryDarkColor}"/>
+    <SolidColorBrush x:Key="RedBrush" Color="{StaticResource RedColor}"/>
+    <SolidColorBrush x:Key="RedDarkBrush" Color="{StaticResource RedDarkColor}"/>
+    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
+</ResourceDictionary>
