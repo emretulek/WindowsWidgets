@@ -32,6 +32,84 @@ Common settings for all widgets include:
 - Draggable
 - Interactive
 
+settings.default.json configuration file example
+
+```json
+{
+    "Widgets": {
+        "ClockPlugin": {
+            "IsActive": false,
+            "Width": 400.0,
+            "Height": 200.0,
+            "MaxWidth": 99999.0,
+            "MaxHeight": 99999.0,
+            "MinWidth": 0.0,
+            "MinHeight": 0.0,
+            "Left": 200.0,
+            "Top": 200.0,
+            "Background": "#20000000",
+            "BorderBrush": "#FF000000",
+            "BorderThickness": "1,1,1,1",
+            "Margin": "0,0,0,0",
+            "Padding": "10,10,10,10",
+            "AllowsTransparency": true,
+            "WindowStyle": 0,
+            "ResizeMode": 3,
+            "ShowInTaskbar": false,
+            "SizeToContent": 0,
+            "IsHitTestVisible": true,
+            "Dragable": true
+        },
+        "NetworkMonitorPlugin": {
+            "IsActive": false,
+            "Width": 400.0,
+            "Height": 200.0,
+            "MaxWidth": 99999.0,
+            "MaxHeight": 99999.0,
+            "MinWidth": 0.0,
+            "MinHeight": 0.0,
+            "Left": 209.0,
+            "Top": 193.0,
+            "Background": "#20000000",
+            "BorderBrush": "#FF000000",
+            "BorderThickness": "1,1,1,1",
+            "Margin": "0,0,0,0",
+            "Padding": "0,0,0,0",
+            "AllowsTransparency": true,
+            "WindowStyle": 0,
+            "ResizeMode": 3,
+            "ShowInTaskbar": false,
+            "SizeToContent": 0,
+            "IsHitTestVisible": true,
+            "Dragable": true
+        }
+    }
+}
+```
+The widgets are located under the Plugins directory, and each widget has its own folder. For example, the file paths for the Clock Plugin are as follows:
+
+```
+Widgets/Plugins/Clock/Clock.dll  
+Widgets/Plugins/Clock/clock.settings.json
+```
+
+# Internal Settings
+
+Internal settings are unique configuration files for each widget. Beyond general features, the creator of the plugin can use this settings file to make anything customizable, such as font size, background, or any other property.
+
+```json
+{
+  "clock_font_size": 64.0,
+  "clock_foreground": "#FF8B0000",
+  "date_font_size": 18.0,
+  "date_foreground": "#FFBC8F8F"
+}
+```
+
+---
+
+## Main Widgets
+
 Below is a brief description of each widget and its corresponding repository link.
 
 ### Clock
