@@ -205,7 +205,7 @@ A widget designed for listening to internet radio stations. Built on VLCLib, it 
 ## Widgets.Common
 **Widgets.Common** serves as the bridge between widgets and provides tools to simplify development for widget creators. It includes the essential base classes and examples for building widgets.
 
-[GitHub Repo](#)
+[GitHub Repo](https://github.com/emretulek/Widgets.Common)
 
 ---
 
