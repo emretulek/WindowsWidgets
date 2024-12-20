@@ -19,7 +19,7 @@ Widget Manager is a Windows application that enables you to create, load, and ma
 ## Widgets
 
 - [Clock](#clock)
-- [Monitor](#monitor)
+- [CPU Monitor](#cpu-monitor)
 - [Memory Monitor](#memory-monitor)
 - [Network Monitor](#network-monitor)
 - [Disk Monitor](#disk-monitor)
