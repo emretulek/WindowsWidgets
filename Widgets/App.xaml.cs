@@ -20,7 +20,6 @@ namespace Widgets
         private readonly static RegistryKey? RegisterKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         public readonly static string pluginsPath = Widgets.Common.Config.PluginPath;
         public readonly static string SettingsDefaultFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.default.json");
-        public readonly static string LogFileDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
         public readonly static string IconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Widget.ico");
 
         private static Mutex? _mutex;
@@ -146,22 +145,7 @@ namespace Widgets
        /// </summary>
         private void StartLogger()
         {
-            string date = DateTime.Now.ToString("yyyy_MM_dd");
-            string fileName = $"{LogFileDir}/{date}_widgets.log";
-            try
-            {
-                if (!Directory.Exists(LogFileDir))
-                {
-                    Directory.CreateDirectory(LogFileDir);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-
-            Logger.SetLogFilePath(fileName);
-            Logger.WriteLogSchedule();
+            Logger.WriteLogSchedule(5);
             Logger.LogEvent += HandleLogEvent;
         }
 
