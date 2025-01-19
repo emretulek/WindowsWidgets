@@ -17,6 +17,19 @@ Widget Manager is a Windows application that enables you to create, load, and ma
 [Download](https://github.com/emretulek/Widgets/releases/download/v1.0.0/Widgets.zip)
 
 ## Widgets
+
+- [Clock](#clock)
+- [CPU Monitor](#cpu-monitor)
+- [Memory Monitor](#memory-monitor)
+- [Network Monitor](#network-monitor)
+- [Disk Monitor](#disk-monitor)
+- [Disk Usage](#disk-usage)
+- [Weather Widget](#weather-widget)
+- [Finance Tracker](#finance-tracker)
+- [Crypto Tracker](#crypto-tracker)
+- [Radio](#radio)
+- [SnapLate](#snaplate)
+
 Common settings for all widgets include:
 - Height / Width
 - Max Height / Max Width
@@ -199,6 +212,15 @@ A widget designed for listening to internet radio stations. Built on VLCLib, it 
 [GitHub Repo](https://github.com/emretulek/Radio)
 
 ![Radio Widget](https://raw.githubusercontent.com/emretulek/Widgets/refs/heads/master/srcreenshots/radio.jpg)
+
+---
+
+### SnapLate
+With this widget, you can use translate on your desktop, you can extract and translate the text and images from the text and images that cannot be copied.
+
+[GitHub Repo](https://github.com/emretulek/SnapLate)
+
+![SnapLate_Widget](https://raw.githubusercontent.com/emretulek/Widgets/refs/heads/master/srcreenshots/snaplate_1.jpg)
 
 ---
 
