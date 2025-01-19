@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -14,6 +13,7 @@ namespace Widgets
 
         public IPlugin Plugin;
         public string WidgetID;
+        private TaskCompletionSource<bool>? widgetLoaded;
 
         public WidgetViewModel(IPlugin Plugin)
         {
@@ -23,18 +23,61 @@ namespace Widgets
             IsActive = WidgetSettings.IsActive;
         }
 
+        /// <summary>
+        /// Widget Window Instance
+        /// </summary>
+        /// <returns></returns>
+        private bool WidgetInit()
+        {
+            if (WidgetWindow == null)
+            {
+                try
+                {
+                    widgetLoaded = new TaskCompletionSource<bool>();
+                    WidgetWindow = Plugin.WidgetWindow();
+                    WidgetWindow.SetWidgetStruct(WidgetSettings);
+                    WidgetWindow.Window.Loaded += WidgetWindow_Loaded;
+                    WidgetWindow.Window.Activated += WidgetWindow_Activated;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Widget Window Instance:{ex.Message}");
+                }
+            }
+
+            return WidgetWindow != null;
+        }
 
         /// <summary>
-        /// Formdaki widget Name binding
+        /// Open Widget Window
         /// </summary>
-        private string _name = "";
-        public string Name
+        private void WidgetOpen()
         {
-            get { return _name; }
-            set
+            if (WidgetInit() && WidgetWindow is not null)
             {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
+                if (_isActive && !WidgetWindow.Window.IsVisible)
+                {
+                    WidgetWindow.Window.Show();
+                    Logger.Info($"Plugin Activated: {Plugin.Name}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Close Widget Window
+        /// </summary>
+        private void WidgetClose()
+        {
+            if (WidgetInit() && WidgetWindow is not null)
+            {
+                if (!_isActive && WidgetWindow.Window.IsVisible)
+                {
+                    WidgetWindow.Window.Close();
+                    WidgetWindow.Window.Loaded -= WidgetWindow_Loaded;
+                    WidgetWindow.Window.Activated -= WidgetWindow_Activated;
+                    WidgetWindow = null;
+                    Logger.Info($"Plugin Deactivated: {Plugin.Name}");
+                }
             }
         }
 
@@ -51,46 +94,36 @@ namespace Widgets
                 {
                     _isActive = value;
 
-                    WidgetSettings.IsActive = value;
+                    WidgetSettings.IsActive = _isActive;
                     Instance.SetConfig(WidgetID, WidgetSettings);
                     Instance.Save();
 
-                    if (WidgetWindow == null && _isActive)
+                    if(_isActive)
                     {
-                        try
-                        {
-                            WidgetWindow = Plugin.WidgetWindow();
-                            WidgetWindow.SetWidgetStruct(WidgetSettings);
-                            WidgetWindow.Window.Loaded += WidgetWindow_Loaded;
-                            WidgetWindow.Window.Activated += WidgetWindow_Activated;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Error($"Widget Window Instance:{ex.Message}");
-                        }
+                        WidgetOpen();
                     }
-
-                    // WidgetWindow State
-                    if (WidgetWindow != null)
+                    else
                     {
-                        if (_isActive && !WidgetWindow.Window.IsVisible)
-                        {
-                            WidgetWindow.Window.Show();
-                            Logger.Info($"Plugin Activated: {Plugin.Name}");
-                        }
-
-                        if (!_isActive && WidgetWindow.Window.IsVisible)
-                        {
-                            WidgetWindow.Window.Close();
-                            WidgetWindow.Window.Loaded -= WidgetWindow_Loaded;
-                            WidgetWindow.Window.Activated -= WidgetWindow_Activated;
-                            WidgetWindow = null;
-                            Logger.Info($"Plugin Deactivated: {Plugin.Name}");
-                        }
+                        WidgetClose();
                     }
 
                     OnPropertyChanged(nameof(IsActive));
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// Formdaki widget Name binding
+        /// </summary>
+        private string _name = "";
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -352,7 +385,7 @@ namespace Widgets
         }
 
         /// <summary>
-        /// Widget Dragable
+        /// Widget SizeToContent
         /// </summary>
         private int _sizeToContent;
         public int SizeToContent
@@ -405,7 +438,7 @@ namespace Widgets
         }
 
         /// <summary>
-        /// Widget Dragable
+        /// Widget Resizable
         /// </summary>
         private int _resizable;
         public int Resizable
@@ -420,7 +453,7 @@ namespace Widgets
         }
 
         /// <summary>
-        /// Widget Dragable
+        /// Widget Interactive
         /// </summary>
         private bool _interactive;
         public bool Interactive
@@ -434,6 +467,24 @@ namespace Widgets
                     WidgetWindow.IsHitTestVisible = _interactive;
                 }
                 OnPropertyChanged(nameof(Interactive));
+            }
+        }
+
+        /// <summary>
+        /// Widget Dragable
+        /// </summary>
+        private bool _desktopIntegration;
+        public bool DesktopIntegration
+        {
+            get { return _desktopIntegration; }
+            set
+            {
+                _desktopIntegration = value;
+                if (WidgetWindow != null)
+                {
+                    WidgetWindow.DesktopIntegration = _desktopIntegration;
+                }
+                OnPropertyChanged(nameof(DesktopIntegration));
             }
         }
 
@@ -470,7 +521,7 @@ namespace Widgets
             }
         }
 
-        //widget is Dragable
+        //widget is Resizable
         private void WidgetResizableUpdate()
         {
             if (WidgetWindow != null && WidgetWindow.Window.IsVisible)
@@ -488,7 +539,7 @@ namespace Widgets
             }
         }
 
-        // Widget window dragmove
+        // Widget window resize
         private void Widget_Resize(object sender, SizeChangedEventArgs e)
         {
             if (WidgetWindow != null && WidgetWindow.Window.IsActive)
@@ -501,8 +552,25 @@ namespace Widgets
         // Widget window Loaded
         private void WidgetWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Resizable = (int)WidgetSettings.ResizeMode;
-            Dragable = WidgetSettings.Dragable;
+            try
+            {
+                Resizable = (int)WidgetSettings.ResizeMode;
+                Dragable = WidgetSettings.Dragable;
+                DesktopIntegration = WidgetSettings.DesktopIntegration;
+            }
+            finally
+            {
+                widgetLoaded?.SetResult(true);
+            }
+        }
+
+        // Widget window Activated
+        public async Task WidgetLoaded()
+        {
+            if (widgetLoaded != null)
+            {
+                await widgetLoaded.Task;
+            }
         }
 
         // Widget window Activated
@@ -514,23 +582,24 @@ namespace Widgets
 
         public void InitSettings()
         {
-            Width = WidgetSettings.Width;
-            Height = WidgetSettings.Height;
-            MaxWidth = WidgetSettings.MaxWidth;
-            MaxHeight = WidgetSettings.MaxHeight;
-            MinWidth = WidgetSettings.MinWidth;
-            MinHeight = WidgetSettings.MinHeight;
-            Left = WidgetSettings.Left;
-            Top = WidgetSettings.Top;
-            Border = WidgetSettings.BorderThickness;
-            Margin = WidgetSettings.Margin;
-            Padding = WidgetSettings.Padding;
-            BorderColor = WidgetSettings.BorderBrush.Color;
-            Background = WidgetSettings.Background.Color;
-            SizeToContent = (int)WidgetSettings.SizeToContent;
-            Resizable = (int)WidgetSettings.ResizeMode;
-            Interactive = WidgetSettings.IsHitTestVisible;
-            Dragable = WidgetSettings.Dragable;
+            _width = WidgetSettings.Width;
+            _height = WidgetSettings.Height;
+            _maxWidth = WidgetSettings.MaxWidth;
+            _maxHeight = WidgetSettings.MaxHeight;
+            _minWidth = WidgetSettings.MinWidth;
+            _minHeight = WidgetSettings.MinHeight;
+            _left = WidgetSettings.Left;
+            _top = WidgetSettings.Top;
+            _border = WidgetSettings.BorderThickness;
+            _margin = WidgetSettings.Margin;
+            _padding = WidgetSettings.Padding;
+            _borderColor = WidgetSettings.BorderBrush.Color;
+            _background = WidgetSettings.Background.Color;
+            _sizeToContent = (int)WidgetSettings.SizeToContent;
+            _interactive = WidgetSettings.IsHitTestVisible;
+            _resizable = (int)WidgetSettings.ResizeMode;
+            _dragable = WidgetSettings.Dragable;
+            _desktopIntegration = WidgetSettings.DesktopIntegration;
         }
 
         public WidgetDefaultStruct ExportSettings()
@@ -550,6 +619,7 @@ namespace Widgets
             WidgetSettings.ResizeMode = (ResizeMode)Resizable;
             WidgetSettings.Dragable = Dragable;
             WidgetSettings.IsHitTestVisible = Interactive;
+            WidgetSettings.DesktopIntegration = DesktopIntegration;
             WidgetSettings.BorderBrush = new SolidColorBrush(BorderColor);
             WidgetSettings.Background = new SolidColorBrush(Background);
             

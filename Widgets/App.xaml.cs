@@ -158,7 +158,7 @@ namespace Widgets
         {
             Debug.WriteLine(logMessage.ToString());
 
-            var logFormat = $"[{logMessage.Timestamp}] [{logMessage.Level}] [{logMessage.PluginName}] {logMessage.Message}";
+            var logFormat = $"[{logMessage.Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{logMessage.Level}] [{logMessage.PluginName}] {logMessage.Message}";
 
             Logger.BufferLog(logFormat);
         }
@@ -166,7 +166,7 @@ namespace Widgets
         // Unhandled excepitons
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Logger.Warning(e.Exception.Message);
+            Logger.Warning(e.Exception);
             MessageBox.Show($"Error: {e.Exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
@@ -176,7 +176,7 @@ namespace Widgets
         {
             if (e.ExceptionObject is Exception exception)
             {
-                Logger.Error(exception.Message);
+                Logger.Error(exception);
                 //MessageBox.Show($"Error: {exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -184,7 +184,7 @@ namespace Widgets
         // Unhandled excepitons
         private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
         {
-            Logger.Error(e.Exception.Message);
+            Logger.Error(e.Exception);
             //MessageBox.Show($"Error: {e.Exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.SetObserved();
         }

@@ -179,7 +179,11 @@
                             <TextBlock Text="Interactive" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
                             <CheckBox x:Name="wInteractive" IsChecked="{Binding SelectedWidget.Interactive}" Foreground="{StaticResource TextBrush}" Style="{StaticResource CheckBox}"></CheckBox>
                         </StackPanel>
+                    <StackPanel  Margin="0 9" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <TextBlock Text="Desktop Mode" Foreground="{StaticResource TextBrush}" Width="100" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="wDesktopIntegration" IsChecked="{Binding SelectedWidget.DesktopIntegration}" Foreground="{StaticResource TextBrush}" Style="{StaticResource CheckBox}"></CheckBox>
                     </StackPanel>
+                </StackPanel>
 
                     <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="False" Margin="0">
                         <CheckBox x:Name="StartupCheckBox" Click="Startup_Click" Style="{StaticResource CheckBox}" DockPanel.Dock="Left" Foreground="{StaticResource TextBrush}">Start on system startup</CheckBox>

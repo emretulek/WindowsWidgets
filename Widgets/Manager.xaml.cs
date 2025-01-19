@@ -67,7 +67,7 @@ namespace Widgets
         }
 
         // widget list to listbox
-        public void CreateWidgetList()
+        public async void CreateWidgetList()
         {
             WidgetListBox.ItemsSource = Widgets;
 
@@ -87,6 +87,7 @@ namespace Widgets
                     };
 
                     Widgets.Add(widgetViewModel);
+                    await widgetViewModel.WidgetLoaded();
 
                 }
                 catch (Exception ex)

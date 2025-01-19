@@ -39,6 +39,7 @@ namespace Widgets
                 ShowInTaskbar = configStruct.ShowInTaskbar,
                 SizeToContent = configStruct.SizeToContent,
                 IsHitTestVisible = configStruct.IsHitTestVisible,
+                DesktopIntegration = configStruct.DesktopIntegration,
                 Dragable = configStruct.Dragable,
             };
         }
@@ -66,6 +67,8 @@ namespace Widgets
                 ShowInTaskbar = defaultStruct.ShowInTaskbar,
                 AllowsTransparency= defaultStruct.AllowsTransparency,
                 SizeToContent= defaultStruct.SizeToContent,
+                IsHitTestVisible = defaultStruct.IsHitTestVisible,
+                DesktopIntegration = defaultStruct.DesktopIntegration,
                 Dragable = defaultStruct.Dragable,
             };
         }
@@ -93,6 +96,7 @@ namespace Widgets
         public bool ShowInTaskbar { get; set; }
         public SizeToContent SizeToContent { get; set; }
         public bool IsHitTestVisible { get; set; }
+        public bool DesktopIntegration { get; set; }
         public bool Dragable { get; set; }
     };
 }
