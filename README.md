@@ -46,6 +46,7 @@ Common settings for all widgets include:
 - Resizable
 - Draggable
 - Interactive
+- Desktop Mode
 
 settings.default.json configuration file example
 
