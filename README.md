@@ -4,6 +4,8 @@ Widget Manager is a Windows application that enables you to create, load, and ma
 
 ![Clock Widget](https://raw.githubusercontent.com/emretulek/Widgets/refs/heads/master/srcreenshots/manager.jpg)
 
+![Desktop Screenshot](https://raw.githubusercontent.com/emretulek/WindowsWidgets/refs/heads/master/srcreenshots/descktop.jpg)
+
 ## Features
 - **Lightweight and User-Friendly:** Widget Manager efficiently utilizes system resources.
 - **Flexible Structure:** Users can activate/deactivate existing widgets or easily develop their own.
